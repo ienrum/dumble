@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Floor
   - Head
+  - Door
   layers:
   - Default
   - TransparentFX

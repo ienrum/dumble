@@ -10,9 +10,13 @@ public class Player : MonoBehaviour
     float energy = 0;
     // parent 해제후 놓을 공간
     public Transform freeZone = null;
+    public GameObject floorPrefab = null;
+    public Transform floorFreeZone = null;
+    public Transform continuePos = null;
     // Start is called before the first frame update
     void Start()
     {
+        Time.timeScale = 1.3f;
         rigi = GetComponent<Rigidbody>();
     }
 
@@ -38,7 +42,7 @@ public class Player : MonoBehaviour
             float jumpFlag = Input.GetAxisRaw("Jump");
             // 버튼이 눌리면 에너지를 모으고
             if (jumpFlag > 0)
-                energy += Time.deltaTime;
+                energy += Time.deltaTime/2;
             else if(jumpFlag == 0 && energy != 0) // 버튼이 떨어지면 에너지만큼 점프를 뛴다.
 			{
                 energy = Mathf.Clamp(energy, 0, 1) + 0.9f;
@@ -66,4 +70,17 @@ public class Player : MonoBehaviour
             o.transform.parent = freeZone;
         }
     }
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if(other.tag == "Door")
+		{
+
+
+            GameObject temp = GameObject.Instantiate(floorPrefab);
+            temp.transform.parent = floorFreeZone;
+            temp.transform.position = other.transform.parent.GetChild(5).position;
+            other.gameObject.GetComponent<BoxCollider>().enabled = false;
+		}
+	}
 }
