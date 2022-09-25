@@ -15,6 +15,6 @@ public class Door : MonoBehaviour
 
         GameObject temp = GameObject.Instantiate(obs);
         temp.transform.position = Poses[rand].position;
-        temp.transform.parent = ObsZone;
+        temp.transform.parent = GameObject.FindGameObjectWithTag("FloorZone").transform;
     }
 }

@@ -1,36 +1,60 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
     Rigidbody rigi;
     bool canDumbling = false;
+    public bool jumping = false;
     float jumpPower = 560f;
-    float energy = 0;
+    public float energy = 0;
     // parent 해제후 놓을 공간
     public Transform freeZone = null;
     public GameObject floorPrefab = null;
     public Transform floorFreeZone = null;
-    public Transform continuePos = null;
+
+    TextMeshProUGUI text;
+    TextMeshProUGUI bestText;
+
+    static int bestScore = 0;
+    int score = 0;
+    public bool Died = false;
     // Start is called before the first frame update
     void Start()
     {
-        Time.timeScale = 1.3f;
+        
         rigi = GetComponent<Rigidbody>();
+        text = FindObjectOfType<TextMeshProUGUI>();
+        bestText = GameObject.FindGameObjectWithTag("BestScore").GetComponent<TextMeshProUGUI>();
+        text = GameObject.FindGameObjectWithTag("Score").GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Dumbling();
+        score = ((int)Mathf.Floor(transform.position.z) - 5);
+        text.text = "" + score;
+        if (bestScore < score)
+		{
+            bestScore = score;
+            bestText.text = "BEST : "+ bestScore;
+        }
+            
+        if (!Died)
+            Dumbling();
+        if (canDumbling)
+            Time.timeScale = 1.15f;
     }
     // 바닥에 닿으면 덤블링 가능하다.
 	private void OnCollisionEnter(Collision collision)
 	{
-        if (collision.gameObject.tag == "Floor")
+        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Roll" || collision.gameObject.tag == "Obs")
         {
             canDumbling = true;
+            jumping = false;
         }
     }
     // 덤블링함수
@@ -45,12 +69,13 @@ public class Player : MonoBehaviour
                 energy += Time.deltaTime/2;
             else if(jumpFlag == 0 && energy != 0) // 버튼이 떨어지면 에너지만큼 점프를 뛴다.
 			{
-                energy = Mathf.Clamp(energy, 0, 1) + 0.9f;
+                energy = Mathf.Clamp(energy, 0, 3) + 0.9f;
                 Vector3 jumpDir = (Vector3.up * 2 + transform.up).normalized;
                 rigi.AddForce(jumpDir * jumpPower * energy);
                 rigi.AddTorque(Vector3.right * jumpPower * energy);
                 energy = 0f;
                 canDumbling = false;
+                jumping = true;
             }                
         }
 	}
@@ -67,18 +92,17 @@ public class Player : MonoBehaviour
         foreach (Rigidbody o in ok2)
         {
             o.isKinematic = false;
-            o.transform.parent = freeZone;
+            o.transform.parent = GameObject.FindGameObjectWithTag("EnemyZone").transform;
         }
+        Died = true;
     }
 
 	private void OnTriggerEnter(Collider other)
 	{
 		if(other.tag == "Door")
 		{
-
-
             GameObject temp = GameObject.Instantiate(floorPrefab);
-            temp.transform.parent = floorFreeZone;
+            temp.transform.parent = GameObject.FindGameObjectWithTag("FloorZone").transform;
             temp.transform.position = other.transform.parent.GetChild(5).position;
             other.gameObject.GetComponent<BoxCollider>().enabled = false;
 		}

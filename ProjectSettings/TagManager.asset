@@ -7,6 +7,14 @@ TagManager:
   - Floor
   - Head
   - Door
+  - Enemy
+  - EnemyZone
+  - FloorZone
+  - PlayerZone
+  - Roll
+  - Obs
+  - BestScore
+  - Score
   layers:
   - Default
   - TransparentFX
