@@ -20,9 +20,8 @@ public class Roll : MonoBehaviour
     IEnumerator Fade()
     {
         yield return new WaitForSeconds(2f);
-        GameObject temp = Instantiate(gameObject);
-        temp.transform.position = FindObjectOfType<Camera>().transform.GetChild(0).position;
-        Destroy(gameObject);
-
+        Transform resetTrans = FindObjectOfType<Camera>().transform.GetChild(0);
+        gameObject.transform.position = resetTrans.position;
+        gameObject.transform.rotation = Quaternion.Euler(new Vector3(0,0,90));
     }
 }

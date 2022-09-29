@@ -7,7 +7,7 @@ using TMPro;
 public class Player : MonoBehaviour
 {
     Rigidbody rigi;
-    bool canDumbling = false;
+    public bool canDumbling = false;
     public bool jumping = false;
     float jumpPower = 560f;
     public float energy = 0;
@@ -22,6 +22,10 @@ public class Player : MonoBehaviour
     static int bestScore = 0;
     int score = 0;
     public bool Died = false;
+
+    AudioSource dieSound;
+    AudioSource jumpSound;
+    AudioSource landSound;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +34,13 @@ public class Player : MonoBehaviour
         text = FindObjectOfType<TextMeshProUGUI>();
         bestText = GameObject.FindGameObjectWithTag("BestScore").GetComponent<TextMeshProUGUI>();
         text = GameObject.FindGameObjectWithTag("Score").GetComponent<TextMeshProUGUI>();
+
+        dieSound = GameObject.FindGameObjectWithTag("DieSound").GetComponent<AudioSource>();
+        jumpSound = GameObject.FindGameObjectWithTag("JumpSound").GetComponent<AudioSource>();
+        landSound = GameObject.FindGameObjectWithTag("LandSound").GetComponent<AudioSource>();
+
+        bestScore = PlayerPrefs.GetInt("BestScore");
+        bestText.text = "BEST "+bestScore;
     }
 
     // Update is called once per frame
@@ -38,15 +49,14 @@ public class Player : MonoBehaviour
         score = ((int)Mathf.Floor(transform.position.z) - 5);
         text.text = "" + score;
         if (bestScore < score)
-		{
+        {
             bestScore = score;
-            bestText.text = "BEST : "+ bestScore;
+            bestText.text = "BEST " + bestScore;
         }
             
         if (!Died)
             Dumbling();
-        if (canDumbling)
-            Time.timeScale = 1.15f;
+        PlayerPrefs.SetInt("BestScore", bestScore);
     }
     // 바닥에 닿으면 덤블링 가능하다.
 	private void OnCollisionEnter(Collision collision)
@@ -55,19 +65,27 @@ public class Player : MonoBehaviour
         {
             canDumbling = true;
             jumping = false;
+            landSound.Play();
         }
     }
     // 덤블링함수
 	void Dumbling()
 	{
+        Touch touch;
         // 바닥에 닿으면
-		if (canDumbling)
+        if (canDumbling)
 		{
             float jumpFlag = Input.GetAxisRaw("Jump");
+
             // 버튼이 눌리면 에너지를 모으고
-            if (jumpFlag > 0)
-                energy += Time.deltaTime/2;
-            else if(jumpFlag == 0 && energy != 0) // 버튼이 떨어지면 에너지만큼 점프를 뛴다.
+
+            if (jumpFlag > 0 || Input.touchCount > 0)
+			{
+                energy += Time.deltaTime / 2; 
+                
+            }
+                
+            else if((jumpFlag == 0 || Input.touchCount == 0)&& energy != 0) // 버튼이 떨어지면 에너지만큼 점프를 뛴다.
 			{
                 energy = Mathf.Clamp(energy, 0, 3) + 0.9f;
                 Vector3 jumpDir = (Vector3.up * 2 + transform.up).normalized;
@@ -76,12 +94,14 @@ public class Player : MonoBehaviour
                 energy = 0f;
                 canDumbling = false;
                 jumping = true;
+                jumpSound.Play();
             }                
         }
 	}
     // Die 함수 죽을때 주는 함수
     public void Die()
 	{
+        dieSound.Play();
         // 자식들의 parent 를 플레이어가 아닌곳으로 이동한후에 중력을 줘서 흩어지게함
         Collider[] ok = GetComponentsInChildren<Collider>();
         foreach (Collider o in ok)

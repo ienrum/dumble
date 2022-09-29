@@ -15,6 +15,11 @@ TagManager:
   - Obs
   - BestScore
   - Score
+  - Sound
+  - JumpSound
+  - DieSound
+  - LandSound
+  - Title
   layers:
   - Default
   - TransparentFX

@@ -14,8 +14,8 @@ public class CameraCon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = FindObjectOfType<Player>();
-        playerPos = FindObjectOfType<Player>().transform;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        playerPos = player.gameObject.transform;
         camPos = new Vector3(10, 4, 5);
     }
 
@@ -26,10 +26,8 @@ public class CameraCon : MonoBehaviour
             playerPos = GameObject.FindGameObjectWithTag("Player").transform;
         if(player == null)
             player = FindObjectOfType<Player>();
-        Vector3 temp2 = playerPos.position + new Vector3(10, 4, 5); 
 
-        transform.position = Vector3.Lerp(transform.position, temp2, Time.deltaTime * 3f);
-        
+        followToPlayer(1);
         time += Time.deltaTime;
 
         if (Enemy.dieCnt != 0 && time > 1.5f && !player.Died)
@@ -41,5 +39,12 @@ public class CameraCon : MonoBehaviour
             temp.transform.position = transform.GetChild(0).transform.position;
             time = 0;
         }
+    }
+
+    public void followToPlayer(int speed)
+	{
+        Vector3 temp2 = playerPos.position + new Vector3(10, 4, 5);
+
+        transform.position = Vector3.Lerp(transform.position, temp2, Time.deltaTime * 3f * speed);
     }
 }
