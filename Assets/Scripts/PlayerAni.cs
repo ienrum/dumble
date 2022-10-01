@@ -20,7 +20,7 @@ public class PlayerAni : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (player.jumping)
+		if (player.getIsJumping())
 		{
             //transform.Rotate(Vector3.up * lis[rand]);
             rotatingOk = true;
@@ -28,7 +28,7 @@ public class PlayerAni : MonoBehaviour
 		else if(rotatingOk)
 		{
             //transform.rotation = Quaternion.Euler(Vector3.up * lis[rand]);
-            rigi.angularVelocity = rigi.angularVelocity * 0.3f;
+            rigi.angularVelocity = rigi.angularVelocity * 0f;
             rotatingOk = false;
             rand = Random.Range(0, 2);
         }

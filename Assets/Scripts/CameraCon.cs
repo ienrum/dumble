@@ -30,15 +30,6 @@ public class CameraCon : MonoBehaviour
         followToPlayer(1);
         time += Time.deltaTime;
 
-        if (Enemy.dieCnt != 0 && time > 1.5f && !player.Died)
-        {
-
-            GameObject temp = Instantiate(enemyPrefab);
-            Enemy.dieCnt -= 1;
-
-            temp.transform.position = transform.GetChild(0).transform.position;
-            time = 0;
-        }
     }
 
     public void followToPlayer(int speed)

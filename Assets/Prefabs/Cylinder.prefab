@@ -114,7 +114,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &7614178912174625658
 MonoBehaviour:
@@ -128,4 +128,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb30444ccfb83043b934ffe940fcf15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rollPrefab: {fileID: 77509028012952582}

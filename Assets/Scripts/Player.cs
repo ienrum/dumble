@@ -7,102 +7,118 @@ using TMPro;
 public class Player : MonoBehaviour
 {
     Rigidbody rigi;
-    public bool canDumbling = false;
-    public bool jumping = false;
-    float jumpPower = 560f;
+    public bool ifOnTheFloor = false;
+    public bool getIfOnTheFloor() { return ifOnTheFloor; }
+    public void setIfOnTheFloor(bool arg) { ifOnTheFloor = arg; }
+
+    public bool isJumping = false;
+    public bool getIsJumping() { return isJumping; }
+    public void setIsJumping(bool arg) { isJumping = arg; }
+
+    const float jumpPower = 560f;
+    const float flipPower = 100f;
     public float energy = 0;
+
+    Touch touch;
     // parent 해제후 놓을 공간
-    public Transform freeZone = null;
     public GameObject floorPrefab = null;
-    public Transform floorFreeZone = null;
 
     TextMeshProUGUI text;
     TextMeshProUGUI bestText;
+    public GameObject restartUi;
 
-    static int bestScore = 0;
-    int score = 0;
-    public bool Died = false;
+    static int bestScore_PP = 0;
+    int curScore = 0;
+    bool isDied = false;
 
-    AudioSource dieSound;
-    AudioSource jumpSound;
-    AudioSource landSound;
+    public bool getisDied() { return isDied; }
+    public void setisDied(bool arg) { isDied = arg; }
+
     // Start is called before the first frame update
     void Start()
     {
-        
         rigi = GetComponent<Rigidbody>();
         text = FindObjectOfType<TextMeshProUGUI>();
         bestText = GameObject.FindGameObjectWithTag("BestScore").GetComponent<TextMeshProUGUI>();
         text = GameObject.FindGameObjectWithTag("Score").GetComponent<TextMeshProUGUI>();
 
-        dieSound = GameObject.FindGameObjectWithTag("DieSound").GetComponent<AudioSource>();
-        jumpSound = GameObject.FindGameObjectWithTag("JumpSound").GetComponent<AudioSource>();
-        landSound = GameObject.FindGameObjectWithTag("LandSound").GetComponent<AudioSource>();
-
-        bestScore = PlayerPrefs.GetInt("BestScore");
-        bestText.text = "BEST "+bestScore;
+        bestScore_PP = PlayerPrefs.GetInt("BestScore");
+        setScoreToTextUIString(bestText, bestScore_PP, "BEST ");
     }
 
     // Update is called once per frame
     void Update()
     {
-        score = ((int)Mathf.Floor(transform.position.z) - 5);
-        text.text = "" + score;
-        if (bestScore < score)
-        {
-            bestScore = score;
-            bestText.text = "BEST " + bestScore;
-        }
-            
-        if (!Died)
-            Dumbling();
-        PlayerPrefs.SetInt("BestScore", bestScore);
+        scoring();
+        inputActing();        
     }
-    // 바닥에 닿으면 덤블링 가능하다.
-	private void OnCollisionEnter(Collision collision)
+	void scoring()
 	{
-        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Roll" || collision.gameObject.tag == "Obs")
+        curScore = getCurScore();
+
+        setScoreToTextUIString(text, curScore, "");
+
+        if (bestScore_PP < curScore)
         {
-            canDumbling = true;
-            jumping = false;
-            landSound.Play();
+            bestScore_PP = curScore;
+            setScoreToTextUIString(bestText, bestScore_PP, "BEST ");
+        }
+        PlayerPrefs.SetInt("BestScore", bestScore_PP);
+    }
+    void inputActing()
+	{
+        if (!getisDied() && isButtonClicked())
+        {
+            if (getIfOnTheFloor())
+                doJump();
+            else 
+                doFlip();
         }
     }
-    // 덤블링함수
-	void Dumbling()
+    int getCurScore()
 	{
-        Touch touch;
-        // 바닥에 닿으면
-        if (canDumbling)
-		{
-            float jumpFlag = Input.GetAxisRaw("Jump");
-
-            // 버튼이 눌리면 에너지를 모으고
-
-            if (jumpFlag > 0 || Input.touchCount > 0)
-			{
-                energy += Time.deltaTime / 2; 
-                
-            }
-                
-            else if((jumpFlag == 0 || Input.touchCount == 0)&& energy != 0) // 버튼이 떨어지면 에너지만큼 점프를 뛴다.
-			{
-                energy = Mathf.Clamp(energy, 0, 3) + 0.9f;
-                Vector3 jumpDir = (Vector3.up * 2 + transform.up).normalized;
-                rigi.AddForce(jumpDir * jumpPower * energy);
-                rigi.AddTorque(Vector3.right * jumpPower * energy);
-                energy = 0f;
-                canDumbling = false;
-                jumping = true;
-                jumpSound.Play();
-            }                
-        }
+        return (int)Mathf.Floor(transform.position.z) - 5;
+    }
+    void setScoreToTextUIString(TextMeshProUGUI ui, int score,string preWord)
+	{
+        ui.text = preWord + score;
 	}
-    // Die 함수 죽을때 주는 함수
-    public void Die()
+    // 덤블링함수
+    void doJump()
 	{
-        dieSound.Play();
-        // 자식들의 parent 를 플레이어가 아닌곳으로 이동한후에 중력을 줘서 흩어지게함
+        Vector3 jumpDir = (Vector3.up * 2 + transform.up).normalized;
+        rigi.AddForce(jumpDir * jumpPower);
+        setIfOnTheFloor(false);
+        setIsJumping(true);
+	}
+    void doFlip()
+	{
+        if (touch.position.x > Screen.width / 2 || Input.GetKeyDown(KeyCode.RightArrow))
+            rigi.AddTorque(transform.right * flipPower);
+        else if(Input.GetKeyDown(KeyCode.LeftArrow))
+            rigi.AddTorque(-transform.right * flipPower);
+    }
+    bool isButtonClicked()
+	{
+        bool touchFlag = false;
+        
+        if (Input.touchCount > 0)
+		{
+            touch = Input.GetTouch(0);
+            touchFlag = touch.phase == TouchPhase.Began;
+        }
+        bool ok = Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow);
+        return ok || touchFlag;
+    }
+    // Die 함수 죽을때 주는 함수
+    public void DoDie()
+	{
+        setisDied(true);
+        scattering();
+        GameObject.FindGameObjectWithTag("Canvas").transform.GetChild(2).gameObject.SetActive(true);
+    }
+    void scattering()
+	{
         Collider[] ok = GetComponentsInChildren<Collider>();
         foreach (Collider o in ok)
         {
@@ -114,17 +130,28 @@ public class Player : MonoBehaviour
             o.isKinematic = false;
             o.transform.parent = GameObject.FindGameObjectWithTag("EnemyZone").transform;
         }
-        Died = true;
     }
-
 	private void OnTriggerEnter(Collider other)
 	{
 		if(other.tag == "Door")
 		{
-            GameObject temp = GameObject.Instantiate(floorPrefab);
-            temp.transform.parent = GameObject.FindGameObjectWithTag("FloorZone").transform;
-            temp.transform.position = other.transform.parent.GetChild(5).position;
-            other.gameObject.GetComponent<BoxCollider>().enabled = false;
+            creatingNewFloor(other);
 		}
 	}
+    void creatingNewFloor(Collider other)
+	{
+        GameObject temp = GameObject.Instantiate(floorPrefab);
+        temp.transform.parent = GameObject.FindGameObjectWithTag("FloorZone").transform;
+        temp.transform.position = other.transform.parent.GetChild(5).position;
+        other.gameObject.GetComponent<BoxCollider>().enabled = false;
+    }
+    // 바닥에 닿으면 덤블링 가능하다.
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Roll" || collision.gameObject.tag == "Obs")
+        {
+            setIfOnTheFloor(true);
+            setIsJumping(false);
+        }
+    }
 }

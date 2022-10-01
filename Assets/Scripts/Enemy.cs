@@ -4,87 +4,61 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    Rigidbody rigi;
-    bool canDumbling = false;
-    public bool jumping = false;
-    float jumpPower = 560f;
+    public bool ifOnTheFloor = false;
+    public bool getIfOnTheFloor() { return ifOnTheFloor; }
+    public void setIfOnTheFloor(bool arg) { ifOnTheFloor = arg; }
 
-    float dieTime = 0f;
-    float time = 0f;
-    public GameObject enemyPrefab;
-    // parent 해제후 놓을 공간
-    
-    public bool Died = false;
+    public bool died = false;
 
-    bool flag = false;
-    Transform freeZone;
-    public static int dieCnt = 0;
-    Player player;
-    Vector3 playerPos;
+    AudioSource dieSound;
+    int time = 0;
+    protected Rigidbody rigi;
+    float jumpForce = 300f;
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         rigi = GetComponent<Rigidbody>();
-        freeZone = GameObject.FindGameObjectWithTag("EnemyZone").transform;
+        dieSound = GameObject.FindGameObjectWithTag("DieSound").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (!Died)
-            Dumbling();
-        
-        if(rigi.velocity.z >=0 && rigi.velocity.z < 0.2f)
+        if(dieSound == null)
+            dieSound = GameObject.FindGameObjectWithTag("DieSound").GetComponent<AudioSource>();
+        time += (int)Time.deltaTime;
+        if(time % 4 == 0 && getIfOnTheFloor() && !died)
 		{
-            dieTime += Time.deltaTime;
-            if(dieTime > 2f && !Died)
-                Die();
+            doJump();
 		}
-
-        if (Input.GetKeyDown(KeyCode.R))
+    }
+	private void OnCollisionEnter(Collision collision)
+	{
+        GameObject obj = collision.gameObject;
+        if (obj.tag == "Floor")
+        {
+            setIfOnTheFloor(true);
+        }
+        else if (obj.tag == "Roll" || obj.tag == "Obs")
 		{
-            dieCnt = 0;
-            Die();
+            Vector3 flipAngleY = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y+180, transform.eulerAngles.z);
+            transform.rotation = Quaternion.Euler(flipAngleY);
+            setIfOnTheFloor(true);
         }
-            
-
+        else if(obj.tag == "Player" && !died)
+		{
+            obj.GetComponent<Player>().DoDie();
+		}
     }
-    // 바닥에 닿으면 덤블링 가능하다.
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Roll") 
-        {
-            canDumbling = true;
-            jumping = false;
-            flag = true;
-        }
-        if (collision.gameObject.tag == "Player")
-        {
-            collision.gameObject.GetComponent<Player>().Die();
-            
-        }
-    }
-    // 덤블링함수
-    void Dumbling()
-    {
-        // 바닥에 닿으면
-        if (canDumbling)
-        {
-            
-            if (transform.eulerAngles.x > 60 && transform.eulerAngles.x < 100)
-			{
-                Vector3 jumpDir = (Vector3.up * 2 + transform.up).normalized;
-                rigi.AddForce(jumpDir * jumpPower * 0.9f);
-                rigi.AddTorque(Vector3.right * jumpPower * 2f);
-                canDumbling = false;
-                jumping = true;
-            }
-        }
+	public void doJump()
+	{
+        rigi.AddForce((Vector3.up + transform.forward * 0.3f).normalized * jumpForce * Random.Range(1f,2f));
+        setIfOnTheFloor(false);
     }
     // Die 함수 죽을때 주는 함수
-    public void Die()
+    public void Die(bool soundCheck =true)
     {
+        died = true;
         // 자식들의 parent 를 플레이어가 아닌곳으로 이동한후에 중력을 줘서 흩어지게함
         Collider[] ok = GetComponentsInChildren<Collider>();
         foreach (Collider o in ok)
@@ -95,18 +69,28 @@ public class Enemy : MonoBehaviour
         foreach (Rigidbody o in ok2)
         {
             o.isKinematic = false;
+            o.useGravity = true;
             o.transform.parent = GameObject.FindGameObjectWithTag("EnemyZone").transform;
         }
-        Died = true;
-        dieCnt += 1;
+        if(soundCheck)
+            dieSound.Play();
+        
         StartCoroutine(Fade());
     }
 
     IEnumerator Fade()
 	{
-
         yield return new WaitForSeconds(2f);
-        enemyPrefab.SetActive(false);
-
+        Debug.Log(transform.childCount);
+        gameObject.GetComponent<Rigidbody>().useGravity = true;
+        gameObject.SetActive(false);
     }
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if(other.gameObject.tag == "SetFalseZone")
+		{
+            Die(false);
+		}
+	}
 }

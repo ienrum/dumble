@@ -10,7 +10,11 @@ public class AdMobAdsManager : MonoBehaviour
     private InterstitialAd interstitial;
     GameMan gameMan;
 
+    bool shown;
     int adscnt = 1;
+    float time = 0;
+
+    public GameObject enterButton;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +26,13 @@ public class AdMobAdsManager : MonoBehaviour
 
         GameOver();
     }
-
+    void Update()
+    {
+        if (shown == false)
+        {
+            GameOver();
+        }
+    }
     private void RequestInterstitial()
     {
         #if UNITY_ANDROID
@@ -52,11 +62,22 @@ public class AdMobAdsManager : MonoBehaviour
 
     private void GameOver()
     {
-        if (this.interstitial.IsLoaded() && adscnt % 7 == 0)
-        {
-            this.interstitial.Show();
+        if(adscnt % 7 == 0)
+		{
+            time += Time.deltaTime;
+            if (this.interstitial.IsLoaded() || time > 4)
+			{
+                shown = true;
+                enterButton.SetActive(true);
+                this.interstitial.Show();
+                time = 0;
+            }
         }
-            
+		else
+		{
+            enterButton.SetActive(true);
+            shown = true;
+		}
     }
 
     public void HandleOnAdClosed(object sender, EventArgs args)

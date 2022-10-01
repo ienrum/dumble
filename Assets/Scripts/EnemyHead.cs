@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class EnemyHead : MonoBehaviour
 {
-	Enemy player;
+	Enemy enemy;
 	// Start is called before the first frame update
 	void Start()
 	{
-		player = transform.parent.GetComponent<Enemy>();
+		enemy = transform.parent.GetComponent<Enemy>();
 	}
 
-	private void OnTriggerEnter(Collider other)
+	private void OnCollisionEnter(Collision collision)
 	{
-		if (other.tag == "Floor")
+		if (collision.gameObject.tag == "Player" && !enemy.died)
 		{
-			player.Die();
+			GetComponent<Collider>().enabled = false;
+			enemy.Die();
 		}
 	}
 }

@@ -155,6 +155,51 @@ Transform:
   m_Father: {fileID: 7359117529847631851}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5135973383551587525
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 227115835704269407}
+  - component: {fileID: 3082521490820475828}
+  m_Layer: 0
+  m_Name: setFalseZone
+  m_TagString: SetFalseZone
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &227115835704269407
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5135973383551587525}
+  m_LocalRotation: {x: -0.40480173, y: -0, z: -0, w: 0.9144045}
+  m_LocalPosition: {x: 0, y: 15.754848, z: -0.046076216}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7359117529847631851}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: -47.757, y: 0, z: 0}
+--- !u!65 &3082521490820475828
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5135973383551587525}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 42.323536, z: 0.062120147}
+  m_Center: {x: 0, y: 2.6868582, z: -0.46895474}
 --- !u!1 &5981868714791465160
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,6 +237,7 @@ Transform:
   - {fileID: 1767754395}
   - {fileID: 1352826933664751035}
   - {fileID: 2199409401744126042}
+  - {fileID: 227115835704269407}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
@@ -302,7 +348,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 22.237835, z: 1}
+  m_Size: {x: 1, y: 100, z: 1}
   m_Center: {x: 0, y: 3.4749165, z: 0}
 --- !u!114 &5399450477989629529
 MonoBehaviour:
@@ -322,4 +368,6 @@ MonoBehaviour:
   - {fileID: 1577302628}
   - {fileID: 1767754395}
   obs: {fileID: 2528306814877016068, guid: 9f54c67ef9fdc85478a2a406ed1f668d, type: 3}
+  enemy: {fileID: 2966836425859061973, guid: fc539f6bfb6dde34c9a70c5db86a3912, type: 3}
+  flyingEnemy: {fileID: 2966836425859061973, guid: f3f858373dbca3d46a4a1a02cdf7cd01, type: 3}
   ObsZone: {fileID: 3332841549559395825, guid: b97d3b9eed441b541a53779910e775ce, type: 3}

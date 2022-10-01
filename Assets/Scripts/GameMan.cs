@@ -124,17 +124,37 @@ public class GameMan : MonoBehaviour
 
     void colorReset()
 	{
+        float maximum = -1;
+        Color textColor = Color.white;
         int rand = Random.Range(0, colorLis.GetLength(0));
         for (int i = 0; i < Mat.Length; i++)
 		{
             Color color;
+            
+            Color backColor;
             ColorUtility.TryParseHtmlString("#"+colorLis[rand,i%4], out color);
+            
+            ColorUtility.TryParseHtmlString("#" + colorLis[rand, 1], out backColor);
+
+            Vector4 ok = new Vector4(color.r - backColor.r, color.g - backColor.g, color.b - backColor.b, color.a - backColor.a);
+            Vector4 ok2 = new Vector4((color.r * Color.white.r - backColor.r), (color.g * Color.white.g - backColor.g), (color.b * Color.white.b - backColor.b), (color.a * Color.white.a - backColor.a));
+            Vector4 ok3 = new Vector4((color.r * Color.black.r - backColor.r), (color.g * Color.black.g - backColor.g), (color.b * Color.black.b - backColor.b), (color.a * Color.black.a - backColor.a));
+
+            maximum = Mathf.Max(maximum,ok2.magnitude);
+            maximum = Mathf.Max(maximum, ok.magnitude);
+
+            if (maximum < ok3.magnitude)
+			{
+                maximum = ok3.magnitude;
+                textColor = color;
+			}
+
+            
             Mat[i].color = color;
-            Camera.main.backgroundColor = color;
-            ColorUtility.TryParseHtmlString("#" + colorLis[rand, 2], out color);
+            Camera.main.backgroundColor = backColor;
 			foreach (var txt in text)
 			{
-                txt.color = color;
+                txt.color = textColor; 
 			}
         }
     }

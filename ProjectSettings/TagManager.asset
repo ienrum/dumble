@@ -20,6 +20,9 @@ TagManager:
   - DieSound
   - LandSound
   - Title
+  - Restart
+  - Canvas
+  - SetFalseZone
   layers:
   - Default
   - TransparentFX
