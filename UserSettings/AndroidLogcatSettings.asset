@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "LGMV300Lb35ab6b9",
         "name": "com.DumbleGame.HappyDumble",
-        "processId": 11185,
+        "processId": 11638,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -11,205 +11,37 @@
         {
             "deviceId": "LGMV300Lb35ab6b9",
             "name": "com.DumbleGame.HappyDumble",
-            "processId": 1081,
-            "exited": true
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 5806,
-            "exited": true
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 10278,
-            "exited": true
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 19899,
-            "exited": true
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.lge.launcher3",
-            "processId": 6529,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 8917,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 12412,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 16152,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 20677,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 28392,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 3262,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 9360,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 14039,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 3454,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 19139,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 26128,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 11870,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 18028,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 21565,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 25088,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 29372,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 6832,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 15797,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 23720,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 10502,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 27910,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 17041,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 1787,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 12934,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
-            "processId": 21822,
-            "exited": false
-        },
-        {
-            "deviceId": "LGMV300Lb35ab6b9",
-            "name": "com.DumbleGame.HappyDumble",
             "processId": 25354,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "LGMV300Lb35ab6b9",
             "name": "com.DumbleGame.HappyDumble",
             "processId": 28849,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "LGMV300Lb35ab6b9",
             "name": "com.DumbleGame.HappyDumble",
             "processId": 2565,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "LGMV300Lb35ab6b9",
             "name": "com.DumbleGame.HappyDumble",
             "processId": 11185,
+            "exited": true
+        },
+        {
+            "deviceId": "LGMV300Lb35ab6b9",
+            "name": "com.lge.launcher3",
+            "processId": 6738,
+            "exited": false
+        },
+        {
+            "deviceId": "LGMV300Lb35ab6b9",
+            "name": "com.DumbleGame.HappyDumble",
+            "processId": 11638,
             "exited": false
         }
     ],

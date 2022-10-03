@@ -22,6 +22,11 @@ public class GetTouched : MonoBehaviour
         adMobAdsManager = FindObjectOfType<AdMobAdsManager>();
     }
 
+	private void Update()
+	{
+        if (Input.GetKeyDown(KeyCode.R))
+            toMainScene();
+	}
 
 	public void toMainScene()
 	{

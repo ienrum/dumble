@@ -56,7 +56,7 @@ public class GameMan : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
-        Time.timeScale = 1.3f;
+        
         cam = GameObject.FindObjectOfType<Camera>();
         insFloorZone = GameObject.FindGameObjectWithTag("FloorZone");
         insEnemyZone = GameObject.FindGameObjectWithTag("EnemyZone");

@@ -177,7 +177,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0b85eb63e959f344bb5811af25836d7a, type: 2}
+  - {fileID: 2100000, guid: 444bb6ebcd5a39749a6f809de3f883a0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -244,6 +244,7 @@ GameObject:
   - component: {fileID: 5243709028373232707}
   - component: {fileID: 6986151071846951893}
   - component: {fileID: 6986151071846951894}
+  - component: {fileID: 8552229179067342352}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -355,9 +356,12 @@ MonoBehaviour:
   isJumping: 0
   energy: 0
   floorPrefab: {fileID: 5981868714791465160, guid: 74a2ca15a2b00934c990e3570cddb2cf, type: 3}
-  dieSound: {fileID: 318608469748139885, guid: 86e8bc655453dcb45afbb5aea5396ce9, type: 3}
-  jumpSound: {fileID: 8112241689881316364, guid: 0185ebed8f9c4094391f8d2d8981b2ee, type: 3}
-  landSound: {fileID: 2548238356582534422, guid: d0bbf6bea9bd2c340a1b5721c23daaf7, type: 3}
+  health: {fileID: 5722183258899745468, guid: f2b6cc02477797043ad3e3c16cac13d0, type: 3}
+  restartUi: {fileID: 0}
+  bulletPrefab: {fileID: 8341133605458421642, guid: a0e9b60bdcc5be6479ade9ae999a0248, type: 3}
+  curScore: 0
+  bonusScore: 0
+  healthSound: {fileID: 3634784783114592517, guid: b287f4c881ec12247879bdb80eacbbce, type: 3}
 --- !u!136 &5243709028373232707
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -404,6 +408,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093595965b2865540ba20fe6e79f64f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!81 &8552229179067342352
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5243709028373232763}
+  m_Enabled: 1
 --- !u!1 &5243709029561843078
 GameObject:
   m_ObjectHideFlags: 0

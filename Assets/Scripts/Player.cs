@@ -15,21 +15,41 @@ public class Player : MonoBehaviour
     public bool getIsJumping() { return isJumping; }
     public void setIsJumping(bool arg) { isJumping = arg; }
 
-    const float jumpPower = 560f;
-    const float flipPower = 100f;
+    const float jumpPower = 11.5f;
+    const float flipPower = 250f;
     public float energy = 0;
+    float prevScore = 0;
 
     Touch touch;
     // parent 해제후 놓을 공간
     public GameObject floorPrefab = null;
 
+    public health health;
+
     TextMeshProUGUI text;
     TextMeshProUGUI bestText;
+    TextMeshProUGUI bonusText;
+
+    TextMeshProUGUI firstText1;
+    TextMeshProUGUI firstText2;
+
     public GameObject restartUi;
 
+    public GameObject bulletPrefab;
+
     static int bestScore_PP = 0;
-    int curScore = 0;
+    public int curScore = 0;
     bool isDied = false;
+    float bonusTime = 0f;
+    float flipTime = 0;
+
+    float colorCnt = 0;
+
+    public int bonusScore = 0;
+    int resScore = 0;
+
+    AudioSource dieSound;
+    AudioSource healthSound;
 
     public bool getisDied() { return isDied; }
     public void setisDied(bool arg) { isDied = arg; }
@@ -37,37 +57,70 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Time.timeScale = 1.3f;
+
         rigi = GetComponent<Rigidbody>();
         text = FindObjectOfType<TextMeshProUGUI>();
         bestText = GameObject.FindGameObjectWithTag("BestScore").GetComponent<TextMeshProUGUI>();
         text = GameObject.FindGameObjectWithTag("Score").GetComponent<TextMeshProUGUI>();
+        bonusText = GameObject.FindGameObjectWithTag("Bonus").GetComponent<TextMeshProUGUI>();
+        firstText1 = GameObject.FindGameObjectWithTag("FirstText1").GetComponent<TextMeshProUGUI>();
+        firstText2 = GameObject.FindGameObjectWithTag("FirstText2").GetComponent<TextMeshProUGUI>();
+        healthSound = GameObject.FindGameObjectWithTag("HealthSound").GetComponent<AudioSource>();
+
+        dieSound = GameObject.FindGameObjectWithTag("DieSound").GetComponent<AudioSource>();
 
         bestScore_PP = PlayerPrefs.GetInt("BestScore");
         setScoreToTextUIString(bestText, bestScore_PP, "BEST ");
+
+        if(PlayerPrefs.GetInt("BestScore") < 3)
+		{
+            firstText1.enabled = true;
+            firstText2.enabled = true;
+		}
+        //PlayerPrefs.SetInt("BestScore", 0);
     }
 
     // Update is called once per frame
     void Update()
     {
+        GetComponent<MeshRenderer>().material.SetColor("_EmissionColor",Color.black);
         scoring();
-        inputActing();        
+        inputActing();
+        isFlip();
+
+        if (bonusScore != 0)
+        {
+            bonusText.text = "" + bonusScore;
+            resScore += bonusScore;
+            bonusScore = 0;
+            StartCoroutine(FadeScore());
+        }
+        
     }
-	void scoring()
+    IEnumerator FadeScore()
+    {
+        yield return new WaitForSeconds(1f);
+        bonusText.text = "";
+        
+    }
+
+    void scoring()
 	{
         curScore = getCurScore();
 
-        setScoreToTextUIString(text, curScore, "");
+        setScoreToTextUIString(text, curScore+resScore, "");
 
-        if (bestScore_PP < curScore)
+        if (bestScore_PP < curScore + resScore)
         {
-            bestScore_PP = curScore;
+            bestScore_PP = curScore + resScore;
             setScoreToTextUIString(bestText, bestScore_PP, "BEST ");
         }
         PlayerPrefs.SetInt("BestScore", bestScore_PP);
     }
     void inputActing()
 	{
-        if (!getisDied() && isButtonClicked())
+        if (!getisDied() && (isButtonClicked() || Input.touchCount > 0 || Input.GetAxisRaw("Horizontal") !=0))
         {
             if (getIfOnTheFloor())
                 doJump();
@@ -86,17 +139,42 @@ public class Player : MonoBehaviour
     // 덤블링함수
     void doJump()
 	{
-        Vector3 jumpDir = (Vector3.up * 2 + transform.up).normalized;
-        rigi.AddForce(jumpDir * jumpPower);
+        Vector3 jumpDir = (Vector3.up + transform.up).normalized;
+        rigi.velocity = (jumpDir * jumpPower);
         setIfOnTheFloor(false);
         setIsJumping(true);
 	}
     void doFlip()
 	{
-        if (touch.position.x > Screen.width / 2 || Input.GetKeyDown(KeyCode.RightArrow))
-            rigi.AddTorque(transform.right * flipPower);
-        else if(Input.GetKeyDown(KeyCode.LeftArrow))
-            rigi.AddTorque(-transform.right * flipPower);
+        if (touch.position.x > Screen.width / 2 || Input.GetAxisRaw("Horizontal") > 0)
+		{
+            transform.Rotate(Vector3.right * flipPower * Time.deltaTime);
+            rigi.angularVelocity = Vector3.right * 2f;
+        }
+            
+        else if (Input.GetAxisRaw("Horizontal") < 0 ||touch.position.x < Screen.width / 2)
+		{
+            transform.Rotate(-Vector3.right * flipPower * Time.deltaTime);
+            rigi.angularVelocity = Vector3.right * -2f;
+        }
+    }
+
+    void isFlip()
+	{
+        
+        if(Input.touchCount > 0 || Input.GetAxisRaw("Horizontal") != 0)
+		{
+            flipTime += Time.deltaTime;
+ 
+            if(flipTime > 0.07f)
+			{
+                GameObject temp = Instantiate(bulletPrefab);
+                temp.transform.position = transform.position;
+                temp.transform.rotation = transform.rotation;
+
+                flipTime = 0;
+            }
+        }
     }
     bool isButtonClicked()
 	{
@@ -113,9 +191,19 @@ public class Player : MonoBehaviour
     // Die 함수 죽을때 주는 함수
     public void DoDie()
 	{
+        dieSound.Play();
+        setIfOnTheFloor(false);
+        health.cnt--;
+        rigi.velocity = Vector3.up * 11;
+        if (health.cnt != 0)
+		{
+            return;
+		}
         setisDied(true);
         scattering();
         GameObject.FindGameObjectWithTag("Canvas").transform.GetChild(2).gameObject.SetActive(true);
+        firstText1.enabled = false;
+        firstText2.enabled = false;
     }
     void scattering()
 	{
@@ -137,7 +225,10 @@ public class Player : MonoBehaviour
 		{
             creatingNewFloor(other);
 		}
-	}
+        if (other.tag == "Heart")
+            healthSound.Play();
+
+    }
     void creatingNewFloor(Collider other)
 	{
         GameObject temp = GameObject.Instantiate(floorPrefab);

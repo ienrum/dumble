@@ -23,9 +23,11 @@ public class PlayStoreLeaderBoad : MonoBehaviour
 		{
 			PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptAlways, (success) =>
 			{
-				Debug.Log("ok");
+				DoShowBoad();
 			});
 		}
+		else
+			DoShowBoad();
 	}
 	public void doLogout()
 	{
@@ -35,7 +37,10 @@ public class PlayStoreLeaderBoad : MonoBehaviour
 	public void DoShowLeaderBoard()
 	{
 		doLogin();
-		// 1000점을 등록
+	}
+
+	public void DoShowBoad()
+	{
 		Social.ReportScore(PlayerPrefs.GetInt("BestScore"), GPGSIds.leaderboard_ranking, (bool bSuccess) =>
 		{
 			if (bSuccess)
@@ -47,7 +52,7 @@ public class PlayStoreLeaderBoad : MonoBehaviour
 				Debug.Log("ReportLeaderBoard Fall");
 			}
 		}
-		);
+);
 		Social.ShowLeaderboardUI();
 	}
 }

@@ -26,7 +26,13 @@ public class StartSc : MonoBehaviour
         bestScoreText.text = "BEST " + bestScore;
         gameMan = FindObjectOfType<GameMan>();
     }
-    public void touched()
+
+	private void Update()
+	{
+        if (Input.GetKeyDown(KeyCode.R))
+            touched();
+	}
+	public void touched()
 	{
         SceneManager.LoadScene("Game");
     }

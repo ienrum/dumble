@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     public void setIfOnTheFloor(bool arg) { ifOnTheFloor = arg; }
 
     public bool died = false;
+    Player playerScript;
 
     AudioSource dieSound;
     int time = 0;
@@ -19,11 +20,14 @@ public class Enemy : MonoBehaviour
     {
         rigi = GetComponent<Rigidbody>();
         dieSound = GameObject.FindGameObjectWithTag("DieSound").GetComponent<AudioSource>();
+        playerScript = FindObjectOfType<Player>();
     }
 
     // Update is called once per frame
     private void Update()
     {
+        if (playerScript == null)
+            playerScript = FindObjectOfType<Player>();
         if(dieSound == null)
             dieSound = GameObject.FindGameObjectWithTag("DieSound").GetComponent<AudioSource>();
         time += (int)Time.deltaTime;
@@ -39,7 +43,7 @@ public class Enemy : MonoBehaviour
         {
             setIfOnTheFloor(true);
         }
-        else if (obj.tag == "Roll" || obj.tag == "Obs")
+        else if (obj.tag == "Roll" || obj.tag == "Obs" || obj.tag == "Enemy")
 		{
             Vector3 flipAngleY = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y+180, transform.eulerAngles.z);
             transform.rotation = Quaternion.Euler(flipAngleY);
@@ -53,17 +57,19 @@ public class Enemy : MonoBehaviour
 	public void doJump()
 	{
         rigi.AddForce((Vector3.up + transform.forward * 0.3f).normalized * jumpForce * Random.Range(1f,2f));
+        GetComponent<AudioSource>().Play();
         setIfOnTheFloor(false);
     }
     // Die 함수 죽을때 주는 함수
     public void Die(bool soundCheck =true)
     {
         died = true;
+        GetComponent<AudioSource>().enabled = false;
         // 자식들의 parent 를 플레이어가 아닌곳으로 이동한후에 중력을 줘서 흩어지게함
         Collider[] ok = GetComponentsInChildren<Collider>();
         foreach (Collider o in ok)
         {
-            o.isTrigger = false;
+            o.isTrigger = true;
         }
         Rigidbody[] ok2 = GetComponentsInChildren<Rigidbody>();
         foreach (Rigidbody o in ok2)
@@ -72,25 +78,24 @@ public class Enemy : MonoBehaviour
             o.useGravity = true;
             o.transform.parent = GameObject.FindGameObjectWithTag("EnemyZone").transform;
         }
-        if(soundCheck)
+		if (soundCheck)
+		{
             dieSound.Play();
-        
-        StartCoroutine(Fade());
-    }
-
-    IEnumerator Fade()
-	{
-        yield return new WaitForSeconds(2f);
-        Debug.Log(transform.childCount);
-        gameObject.GetComponent<Rigidbody>().useGravity = true;
+            playerScript.bonusScore += 10;
+        }
         gameObject.SetActive(false);
     }
+
 
 	private void OnTriggerEnter(Collider other)
 	{
 		if(other.gameObject.tag == "SetFalseZone")
 		{
             Die(false);
+		}
+        if(other.gameObject.tag=="Bullet")
+		{
+            Die();
 		}
 	}
 }

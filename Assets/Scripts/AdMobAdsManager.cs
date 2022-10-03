@@ -62,22 +62,14 @@ public class AdMobAdsManager : MonoBehaviour
 
     private void GameOver()
     {
-        if(adscnt % 7 == 0)
+        time += Time.deltaTime;
+        if (this.interstitial.IsLoaded() || time > 4)
 		{
-            time += Time.deltaTime;
-            if (this.interstitial.IsLoaded() || time > 4)
-			{
-                shown = true;
-                enterButton.SetActive(true);
-                this.interstitial.Show();
-                time = 0;
-            }
-        }
-		else
-		{
-            enterButton.SetActive(true);
             shown = true;
-		}
+            enterButton.SetActive(true);
+            this.interstitial.Show();
+            time = 0;
+        }
     }
 
     public void HandleOnAdClosed(object sender, EventArgs args)

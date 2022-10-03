@@ -16,6 +16,7 @@ public class Head : MonoBehaviour
 		if (other.tag == "Floor")
 		{
 			player.DoDie();
+			
 		}
 	}
 }

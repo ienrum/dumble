@@ -179,14 +179,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5135973383551587525}
-  m_LocalRotation: {x: -0.40480173, y: -0, z: -0, w: 0.9144045}
-  m_LocalPosition: {x: 0, y: 15.754848, z: -0.046076216}
+  m_LocalRotation: {x: -0.43628073, y: -0.01444263, z: -0.008431117, w: 0.89965516}
+  m_LocalPosition: {x: -0.1531891, y: 9.2075405, z: -1.5917771}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7359117529847631851}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: -47.757, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -51.744, y: -1.724, z: -0.238}
 --- !u!65 &3082521490820475828
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -370,4 +370,7 @@ MonoBehaviour:
   obs: {fileID: 2528306814877016068, guid: 9f54c67ef9fdc85478a2a406ed1f668d, type: 3}
   enemy: {fileID: 2966836425859061973, guid: fc539f6bfb6dde34c9a70c5db86a3912, type: 3}
   flyingEnemy: {fileID: 2966836425859061973, guid: f3f858373dbca3d46a4a1a02cdf7cd01, type: 3}
+  ItemPrefab: {fileID: 396643765673824581, guid: 1394688d003bb084f9e3369296496cf3, type: 3}
   ObsZone: {fileID: 3332841549559395825, guid: b97d3b9eed441b541a53779910e775ce, type: 3}
+  item1Prefab: {fileID: 396643765673824581, guid: 7acd61dac25160f43a808235837a705b, type: 3}
+  heartPrefab: {fileID: 4868468702616876225, guid: 892727c051e790d4990c05ff1eaddbd7, type: 3}

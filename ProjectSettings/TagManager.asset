@@ -23,6 +23,15 @@ TagManager:
   - Restart
   - Canvas
   - SetFalseZone
+  - Bullet
+  - Bonus
+  - FirstText1
+  - FirstText2
+  - Item
+  - SheildZone
+  - item1
+  - Heart
+  - HealthSound
   layers:
   - Default
   - TransparentFX
@@ -30,7 +39,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - a
   - 
   - 
   - 
